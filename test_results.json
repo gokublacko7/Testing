@@ -1,0 +1,30 @@
+{
+  "2D Codes": [
+    {
+      "name": "QR Code - Professional",
+      "file": "tecit_samples/fixed_qrcode_tecit.png",
+      "description": "High-quality QR Code generated at 300 DPI",
+      "output": "\n=== Barcode Decoder with ISO Verification ===\n\nImage: tecit_samples/fixed_qrcode_tecit.png\nSize:  313x313 (3 channels)\n\n=== Decode Results ===\nStatus:     \u2713 SUCCESS\nFormat:     QRCode\nText:       Testing QR Code ISO Verification\nConfidence: High (decoded successfully)\nPosition:   (0, 0) 313x313\n\n=== ISO Verification ===\nStandard: ISO 15415 (2D codes)\n[ISO Verifier] Performing ISO 15415 verification for 2D code...\n\n=== ISO Verification Report ===\nStandard: ISO 15415 (2D)\n\nSymbol Contrast:             100.00 (A)\nModulation:                  100.00 (A)\nAxial Non-Uniformity:        75.00 (C)\nGrid Non-Uniformity:         75.00 (C)\nUnused Error Correction:     100.00 (A)\nFixed Pattern Damage:        100.00 (A)\n\nCommon Parameters:\nQuiet Zone:                  73.65 (C)\nPrint Growth:                80.00 (B)\n\n--- OVERALL GRADE: C ---\nStatus: PASS \u2713\n================================\n\n=== Summary ===\nDecode Status:  \u2713 SUCCESS\nFormat:         QRCode\nData Length:    32 characters\nISO Grade:      C\nISO Compliance: PASS \u2713\n\n=== Complete ===\n\n"
+    },
+    {
+      "name": "Data Matrix - Colored Background",
+      "file": "test_image1.png",
+      "description": "Data Matrix on blue circular background with GS1 format",
+      "output": "\n=== Barcode Decoder with ISO Verification ===\n\nImage: test_image1.png\nSize:  1278x1280 (3 channels)\n\n=== Decode Results ===\nStatus:     \u2713 SUCCESS\nFormat:     DataMatrix\nText:       (01)09521207311504(10)PC12365(17)271231(21)PC123454321Y1\nConfidence: High (decoded successfully)\nPosition:   (417, 205) 448x449\n\n=== ISO Verification ===\nStandard: ISO 15415 (2D codes)\n[ISO Verifier] Performing ISO 15415 verification for 2D code...\n\n=== ISO Verification Report ===\nStandard: ISO 15415 (2D)\n\nSymbol Contrast:             89.02 (B)\nModulation:                  80.21 (B)\nAxial Non-Uniformity:        75.00 (C)\nGrid Non-Uniformity:         75.00 (C)\nUnused Error Correction:     85.00 (B)\nFixed Pattern Damage:        85.00 (B)\n\nCommon Parameters:\nQuiet Zone:                  98.38 (A)\nPrint Growth:                80.00 (B)\n\n--- OVERALL GRADE: C ---\nStatus: PASS \u2713\n================================\n\n=== Summary ===\nDecode Status:  \u2713 SUCCESS\nFormat:         DataMatrix\nData Length:    56 characters\nISO Grade:      C\nISO Compliance: PASS \u2713\n\n=== Complete ===\n\n"
+    }
+  ],
+  "1D Barcodes": [
+    {
+      "name": "Code-128 - Professional",
+      "file": "tecit_samples/fixed_code128_tecit.png",
+      "description": "Professional Code-128 barcode at 300 DPI",
+      "output": "\n=== Barcode Decoder with ISO Verification ===\n\nImage: tecit_samples/fixed_code128_tecit.png\nSize:  1388x313 (3 channels)\n\n=== Decode Results ===\nStatus:     \u2713 SUCCESS\nFormat:     Code128\nText:       CODE128-TEST-12345\nConfidence: High (decoded successfully)\nPosition:   (0, 155) 1387x1\n\n=== ISO Verification ===\nStandard: ISO 15416 (1D barcodes)\n[ISO Verifier] Performing ISO 15416 verification for 1D barcode...\n\n=== ISO Verification Report ===\nStandard: ISO 15416 (1D)\n\nSymbol Contrast:             100.00 (A)\nEdge Contrast:               95.00 (A)\nMinimum Reflectance:         0.00%\nModulation:                  100.00 (A)\nDefects:                     61.81 (D)\nDecodability:                84.72 (B)\n\nCommon Parameters:\nQuiet Zone:                  79.68 (C)\nPrint Growth:                80.00 (B)\n\n--- OVERALL GRADE: D ---\nStatus: PASS \u2713\n================================\n\n=== Summary ===\nDecode Status:  \u2713 SUCCESS\nFormat:         Code128\nData Length:    18 characters\nISO Grade:      D\nISO Compliance: PASS \u2713\n\n=== Complete ===\n\n"
+    },
+    {
+      "name": "EAN-13 - Professional",
+      "file": "tecit_samples/fixed_ean13_tecit.png",
+      "description": "Standard EAN-13 retail barcode at 300 DPI",
+      "output": "\n=== Barcode Decoder with ISO Verification ===\n\nImage: tecit_samples/fixed_ean13_tecit.png\nSize:  707x313 (3 channels)\n\n=== Decode Results ===\nStatus:     \u2713 SUCCESS\nFormat:     EAN-13\nText:       5901234123457\nConfidence: High (decoded successfully)\nPosition:   (69, 155) 593x1\n\n=== ISO Verification ===\nStandard: ISO 15416 (1D barcodes)\n[ISO Verifier] Performing ISO 15416 verification for 1D barcode...\n\n=== ISO Verification Report ===\nStandard: ISO 15416 (1D)\n\nSymbol Contrast:             100.00 (A)\nEdge Contrast:               95.00 (A)\nMinimum Reflectance:         0.00%\nModulation:                  100.00 (A)\nDefects:                     60.00 (D)\nDecodability:                84.00 (B)\n\nCommon Parameters:\nQuiet Zone:                  82.18 (B)\nPrint Growth:                80.00 (B)\n\n--- OVERALL GRADE: D ---\nStatus: PASS \u2713\n================================\n\n=== Summary ===\nDecode Status:  \u2713 SUCCESS\nFormat:         EAN-13\nData Length:    13 characters\nISO Grade:      D\nISO Compliance: PASS \u2713\n\n=== Complete ===\n\n"
+    }
+  ]
+}
