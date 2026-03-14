@@ -1,0 +1,45 @@
+# Barcode/QR Decoder Configuration
+
+## Preprocessing Settings
+
+# Denoise strength (0-30, default: 10)
+DENOISE_STRENGTH=10
+
+# Enable contrast enhancement (true/false)
+ENHANCE_CONTRAST=true
+
+# Enable sharpening (true/false)
+APPLY_SHARPEN=true
+
+## Code Locator Settings
+
+# Minimum code size in pixels (default: 50)
+MIN_CODE_SIZE=50
+
+# Maximum code size in pixels (default: 2000)
+MAX_CODE_SIZE=2000
+
+# Confidence threshold (0.0-1.0, default: 0.5)
+CONFIDENCE_THRESHOLD=0.5
+
+## Decoder Settings
+
+# Try harder for detection (true/false)
+TRY_HARDER=true
+
+# Try rotation (true/false)
+TRY_ROTATE=true
+
+# Try inversion (true/false)
+TRY_INVERT=true
+
+# Maximum decode attempts (1-10, default: 5)
+MAX_ATTEMPTS=5
+
+## ISO Verification
+
+# Enable ISO verification (true/false)
+ENABLE_ISO_VERIFICATION=true
+
+# Minimum passing grade (A, B, C, D, default: D)
+MIN_PASSING_GRADE=D
