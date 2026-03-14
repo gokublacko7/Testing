@@ -1,5 +1,6 @@
 #include "BarcodeDecoder.h"
 #include <ZXing/ReadBarcode.h>
+#include <ZXing/ReaderOptions.h>
 
 BarcodeDecoder::BarcodeDecoder()
     : tryHarder_(true), tryRotate_(true), tryInvert_(true) {
@@ -48,17 +49,18 @@ DecodeResult BarcodeDecoder::decodeSingle(const cv::Mat& input) {
             gray = input.clone();
         }
         
-        // Create ZXing decode hints
-        ZXing::DecodeHints hints;
-        hints.setTryHarder(tryHarder_);
-        hints.setTryRotate(tryRotate_);
-        hints.setTryDownscale(true);
+        // Create ZXing reader options (ZXing 2.x API)
+        ZXing::ReaderOptions options;
+        options.setTryHarder(tryHarder_);
+        options.setTryRotate(tryRotate_);
+        options.setTryInvert(tryInvert_);
+        options.setTryDownscale(true);
         
         // Create image view
         ZXing::ImageView imageView(gray.data, gray.cols, gray.rows, ZXing::ImageFormat::Lum);
         
         // Decode
-        auto zxingResult = ZXing::ReadBarcode(imageView, hints);
+        auto zxingResult = ZXing::ReadBarcode(imageView, options);
         
         if (zxingResult.isValid()) {
             result = convertResult(zxingResult);
@@ -159,14 +161,8 @@ DecodeResult BarcodeDecoder::convertResult(const ZXing::Result& zxingResult) {
     
     result.isValid = zxingResult.isValid();
     
-    // Get text - handle both std::string and std::wstring
-    #ifdef ZX_USE_UTF8
-        result.data = zxingResult.text();
-    #else
-        // Convert wstring to string
-        std::wstring wtext = zxingResult.text();
-        result.data = std::string(wtext.begin(), wtext.end());
-    #endif
+    // Get text - ZXing 2.x uses std::string by default
+    result.data = zxingResult.text();
     
     result.format = ToString(zxingResult.format());
     
