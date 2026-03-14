@@ -1,28 +1,8 @@
 #include "BarcodeDecoder.h"
-#include <ZXing/BarcodeFormat.h>
-#include <ZXing/DecodeHints.h>
-#include <ZXing/MultiFormatReader.h>
-#include <ZXing/Result.h>
+#include <ZXing/ReadBarcode.h>
 
 BarcodeDecoder::BarcodeDecoder()
     : tryHarder_(true), tryRotate_(true), tryInvert_(true) {
-    
-    // Enable all common formats by default
-    enabledFormats_ = {
-        ZXing::BarcodeFormat::QRCode,
-        ZXing::BarcodeFormat::DataMatrix,
-        ZXing::BarcodeFormat::PDF417,
-        ZXing::BarcodeFormat::Aztec,
-        ZXing::BarcodeFormat::Code128,
-        ZXing::BarcodeFormat::Code39,
-        ZXing::BarcodeFormat::Code93,
-        ZXing::BarcodeFormat::EAN13,
-        ZXing::BarcodeFormat::EAN8,
-        ZXing::BarcodeFormat::UPCA,
-        ZXing::BarcodeFormat::UPCE,
-        ZXing::BarcodeFormat::ITF,
-        ZXing::BarcodeFormat::Codabar
-    };
 }
 
 BarcodeDecoder::~BarcodeDecoder() {}
@@ -60,35 +40,22 @@ DecodeResult BarcodeDecoder::decodeSingle(const cv::Mat& input) {
     result.isValid = false;
     
     try {
-        // Convert to ZXing format
-        cv::Mat processedImage = convertToZXingFormat(input);
-        
-        // Create ZXing hints
-        ZXing::DecodeHints hints;
-        hints.setFormats(ZXing::BarcodeFormats(enabledFormats_.begin(), enabledFormats_.end()));
-        hints.setTryHarder(tryHarder_);
-        hints.setTryRotate(tryRotate_);
-        hints.setTryInvert(tryInvert_);
-        hints.setTryDownscale(true);
-        
-        // Create image source
-        int width = processedImage.cols;
-        int height = processedImage.rows;
-        int channels = processedImage.channels();
-        
-        std::vector<uint8_t> buffer;
-        if (channels == 1) {
-            buffer.assign(processedImage.data, processedImage.data + (width * height));
-        } else if (channels == 3) {
-            cv::Mat gray;
-            cv::cvtColor(processedImage, gray, cv::COLOR_BGR2GRAY);
-            buffer.assign(gray.data, gray.data + (width * height));
+        // Convert to grayscale if needed
+        cv::Mat gray;
+        if (input.channels() == 3) {
+            cv::cvtColor(input, gray, cv::COLOR_BGR2GRAY);
         } else {
-            result.error = "Unsupported number of channels";
-            return result;
+            gray = input.clone();
         }
         
-        ZXing::ImageView imageView(buffer.data(), width, height, ZXing::ImageFormat::Lum);
+        // Create ZXing decode hints
+        ZXing::DecodeHints hints;
+        hints.setTryHarder(tryHarder_);
+        hints.setTryRotate(tryRotate_);
+        hints.setTryDownscale(true);
+        
+        // Create image view
+        ZXing::ImageView imageView(gray.data, gray.cols, gray.rows, ZXing::ImageFormat::Lum);
         
         // Decode
         auto zxingResult = ZXing::ReadBarcode(imageView, hints);
@@ -128,11 +95,6 @@ DecodeResult BarcodeDecoder::decodeWithRetry(const cv::Mat& input, int maxAttemp
     // If still not successful, try original image one more time with different settings
     if (!result.isValid) {
         std::cout << "[Decoder] All attempts failed. Trying with relaxed settings..." << std::endl;
-        
-        // Try with very relaxed settings
-        tryHarder_ = true;
-        tryRotate_ = true;
-        tryInvert_ = true;
         result = decodeSingle(input);
     }
     
@@ -146,9 +108,11 @@ std::vector<cv::Mat> BarcodeDecoder::generateVariations(const cv::Mat& input) {
     variations.push_back(input.clone());
     
     // Add inverted
-    cv::Mat inverted;
-    cv::bitwise_not(input, inverted);
-    variations.push_back(inverted);
+    if (tryInvert_) {
+        cv::Mat inverted;
+        cv::bitwise_not(input, inverted);
+        variations.push_back(inverted);
+    }
     
     // Add rotated versions (90, 180, 270 degrees)
     if (tryRotate_) {
@@ -194,7 +158,16 @@ DecodeResult BarcodeDecoder::convertResult(const ZXing::Result& zxingResult) {
     DecodeResult result;
     
     result.isValid = zxingResult.isValid();
-    result.data = zxingResult.text();
+    
+    // Get text - handle both std::string and std::wstring
+    #ifdef ZX_USE_UTF8
+        result.data = zxingResult.text();
+    #else
+        // Convert wstring to string
+        std::wstring wtext = zxingResult.text();
+        result.data = std::string(wtext.begin(), wtext.end());
+    #endif
+    
     result.format = ToString(zxingResult.format());
     
     // Get position
@@ -221,10 +194,6 @@ DecodeResult BarcodeDecoder::convertResult(const ZXing::Result& zxingResult) {
     return result;
 }
 
-std::string BarcodeDecoder::formatToString(ZXing::BarcodeFormat format) {
-    return ToString(format);
-}
-
 void BarcodeDecoder::setTryHarder(bool enable) {
     tryHarder_ = enable;
 }
@@ -235,16 +204,4 @@ void BarcodeDecoder::setTryRotate(bool enable) {
 
 void BarcodeDecoder::setTryInvert(bool enable) {
     tryInvert_ = enable;
-}
-
-void BarcodeDecoder::setFormats(const std::vector<std::string>& formats) {
-    enabledFormats_.clear();
-    for (const auto& format : formats) {
-        try {
-            auto barcodeFormat = ZXing::BarcodeFormatFromString(format);
-            enabledFormats_.push_back(barcodeFormat);
-        } catch (...) {
-            std::cerr << "[Decoder] Unknown format: " << format << std::endl;
-        }
-    }
 }

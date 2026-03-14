@@ -6,14 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Find OpenCV 4.11
-find_package(OpenCV 4.11 REQUIRED)
+# Find OpenCV 4.0+
+find_package(OpenCV 4.0 REQUIRED)
 if(OpenCV_FOUND)
     message(STATUS "OpenCV version: ${OpenCV_VERSION}")
     message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
     message(STATUS "OpenCV include path: ${OpenCV_INCLUDE_DIRS}")
 else()
-    message(FATAL_ERROR "OpenCV 4.11 not found!")
+    message(FATAL_ERROR "OpenCV 4.0+ not found!")
 endif()
 
 # Find ZXing

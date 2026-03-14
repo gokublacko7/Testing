@@ -1,6 +1,5 @@
 #include "ImagePreprocessor.h"
 #include <opencv2/photo.hpp>
-#include <opencv2/ximgproc.hpp>
 
 ImagePreprocessor::ImagePreprocessor()
     : denoiseStrength_(10), enhanceContrast_(true), applySharpen_(true) {}
